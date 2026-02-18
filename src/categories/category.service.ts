@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
 import { Repository } from 'typeorm';
@@ -42,7 +46,9 @@ export class CategoryService {
     }
   }
 
-  async createCategory(createCategoryInput: CreateCategoryInput): Promise<Category> {
+  async createCategory(
+    createCategoryInput: CreateCategoryInput,
+  ): Promise<Category> {
     try {
       const category = this.categoryRepository.create(createCategoryInput);
       return await this.categoryRepository.save(category);
@@ -51,7 +57,10 @@ export class CategoryService {
     }
   }
 
-  async updateCategory(id: number, updateCategoryInput: UpdateCategoryInput): Promise<Category> {
+  async updateCategory(
+    id: number,
+    updateCategoryInput: UpdateCategoryInput,
+  ): Promise<Category> {
     try {
       const category = await this.findOne(id);
       Object.assign(category, updateCategoryInput);
@@ -64,7 +73,7 @@ export class CategoryService {
     }
   }
 
-  async deleteCategory(id: number): Promise<Category> {
+  async deleteCategory(id: number): Promise<boolean> {
     try {
       const category = await this.findOne(id);
 
@@ -74,7 +83,7 @@ export class CategoryService {
       );
 
       await this.categoryRepository.remove(category);
-      return category;
+      return true; // Return true on success
     } catch (error) {
       if (error instanceof NotFoundException) {
         throw error;

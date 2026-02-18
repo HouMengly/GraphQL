@@ -1,4 +1,12 @@
-import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Int,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { Product } from './entities/product.entity';
 import { ProductsService } from './product.service';
 import { CreateProductInput } from './dto/create-product.dto';
@@ -34,7 +42,7 @@ export class ProductsResolver {
     return this.productsService.updateProduct(id, updateProductInput);
   }
 
-  @Mutation(() => Product)
+  @Mutation(() => Boolean)
   async deleteProduct(@Args('id', { type: () => Int }) id: number) {
     return this.productsService.deleteProduct(id);
   }

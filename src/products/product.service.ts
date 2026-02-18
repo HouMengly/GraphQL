@@ -8,44 +8,49 @@ import { UpdateProductInput } from './dto/update-product.dto';
 
 @Injectable()
 export class ProductsService {
-    constructor(
-        @InjectRepository(Product)
-        private productRepository: Repository<Product>,
-        @InjectRepository(Category)
-        private categoryRepository: Repository<Category>,
-    ) {}
+  constructor(
+    @InjectRepository(Product)
+    private productRepository: Repository<Product>,
+    @InjectRepository(Category)
+    private categoryRepository: Repository<Category>,
+  ) {}
 
-    async findAll(): Promise<Product[]> {
-        return this.productRepository.find();
-    }
+  async findAll(): Promise<Product[]> {
+    return this.productRepository.find();
+  }
 
-    async findOne(id: number): Promise<Product> {
-        const product = await this.productRepository.findOne({ where: { id } });
-        if (!product) {
-            throw new NotFoundException(`Product with ID ${id} not found`);
-        }
-        return product;
+  async findOne(id: number): Promise<Product> {
+    const product = await this.productRepository.findOne({ where: { id } });
+    if (!product) {
+      throw new NotFoundException(`Product with ID ${id} not found`);
     }
+    return product;
+  }
 
-    async createProduct(createProductInput: CreateProductInput): Promise<Product> {
-        const product = this.productRepository.create(createProductInput);
-        return this.productRepository.save(product);
-    }
+  async createProduct(
+    createProductInput: CreateProductInput,
+  ): Promise<Product> {
+    const product = this.productRepository.create(createProductInput);
+    return this.productRepository.save(product);
+  }
 
-    async updateProduct(id: number, updateProductInput: UpdateProductInput): Promise<Product> {
-        const product = await this.findOne(id);
-        Object.assign(product, updateProductInput);
-        return this.productRepository.save(product);
-    }
+  async updateProduct(
+    id: number,
+    updateProductInput: UpdateProductInput,
+  ): Promise<Product> {
+    const product = await this.findOne(id);
+    Object.assign(product, updateProductInput);
+    return this.productRepository.save(product);
+  }
 
-    async deleteProduct(id: number): Promise<Product> {
-        const product = await this.findOne(id);
-        await this.productRepository.remove(product);
-        return product;
-    }
+  async deleteProduct(id: number): Promise<boolean> {
+    const product = await this.findOne(id);
+    await this.productRepository.remove(product);
+    return true;
+  }
 
-    async getCategory(categoryId: number): Promise<Category | null> {
-        if (!categoryId) return null;
-        return this.categoryRepository.findOne({ where: { id: categoryId } });
-    }
+  async getCategory(categoryId: number): Promise<Category | null> {
+    if (!categoryId) return null;
+    return this.categoryRepository.findOne({ where: { id: categoryId } });
+  }
 }

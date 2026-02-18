@@ -23,8 +23,9 @@ export class CategoryResolver {
   @Mutation(() => Category)
   async createCategory(
     @Args('createCategoryInput') createCategoryInput: CreateCategoryInput,
-  ) {
-    const response = await this.categoryService.createCategory(createCategoryInput);
+  ): Promise<Category> {
+    const response =
+      await this.categoryService.createCategory(createCategoryInput);
     return response;
   }
 
@@ -33,13 +34,20 @@ export class CategoryResolver {
     @Args('id', { type: () => Int }) id: number,
     @Args('updateCategoryInput') updateCategoryInput: UpdateCategoryInput,
   ) {
-    const response = await this.categoryService.updateCategory(id, updateCategoryInput);
+    const response = await this.categoryService.updateCategory(
+      id,
+      updateCategoryInput,
+    );
     return response;
   }
 
-  @Mutation(() => Category)
-  async deleteCategory(@Args('id', { type: () => Int }) id: number) {
-    const response = await this.categoryService.deleteCategory(id);
-    return response;
+  @Mutation(() => Boolean) // Change to Boolean
+  async deleteCategory(
+    @Args('id', { type: () => Int }) id: number,
+  ): Promise<boolean> {
+    // The service currently returns the Category, but we can ignore it here
+    // or modify the service to return boolean.
+    const result = await this.categoryService.deleteCategory(id);
+    return !!result; // Returns true if result exists, false if null
   }
 }

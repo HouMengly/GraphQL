@@ -15,6 +15,7 @@ input CreateCategoryInput {
 }
 
 input CreateProductInput {
+  categoryId: Int
   discount: Int!
   name: String!
   price: Float!
@@ -29,8 +30,8 @@ scalar DateTime
 type Mutation {
   createCategory(createCategoryInput: CreateCategoryInput!): Category!
   createProduct(createProductInput: CreateProductInput!): Product!
-  deleteCategory(id: Int!): Category!
-  deleteProduct(id: Int!): Product!
+  deleteCategory(id: Int!): Boolean!
+  deleteProduct(id: Int!): Boolean!
   updateCategory(id: Int!, updateCategoryInput: UpdateCategoryInput!): Category!
   updateProduct(id: Int!, updateProductInput: UpdateProductInput!): Product!
 }

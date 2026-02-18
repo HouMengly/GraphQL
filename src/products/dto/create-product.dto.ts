@@ -24,4 +24,9 @@ export class CreateProductInput {
   @Min(0)
   @Max(5)
   rating: number;
+
+  @Field(() => Int, { nullable: true })
+  @IsNumber()
+  @IsOptional()
+  categoryId: number;
 }
